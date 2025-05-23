@@ -7,7 +7,7 @@ yarn-error.log
 # Environment
 .env
 .env.local
-.env.*.local
+.env.*
 
 # Build
 /dist
@@ -24,4 +24,9 @@ yarn-error.log
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Docker
+.docker/
+docker-compose.override.yml
+*.env 

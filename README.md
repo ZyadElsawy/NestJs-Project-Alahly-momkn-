@@ -26,6 +26,33 @@ A comprehensive API for managing SKUs (Stock Keeping Units), inventory, stock tr
 
 ## Installation
 
+### Using Docker (Recommended)
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/ZyadElsawy/Back-End-Projects.git
+cd sku-management-api
+```
+
+2. Create a `.env` file (optional - default values will be used if not provided):
+
+```env
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+DB_NAME=your_database
+```
+
+3. Build and run with Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+The API will be available at `http://localhost:3000/api` and Swagger documentation at `http://localhost:3000/api/docs`
+
+### Manual Installation
+
 1. Clone the repository:
 
 ```bash
@@ -114,3 +141,12 @@ src/
 ## License
 
 This project is licensed under the MIT License.
+
+## Docker Commands
+
+- `docker-compose up -d` - Start the application and database in detached mode
+- `docker-compose down` - Stop the application and database
+- `docker-compose down -v` - Stop the application and remove all data volumes
+- `docker-compose logs -f` - View logs from all containers
+- `docker-compose logs -f app` - View logs from the application only
+- `docker-compose logs -f postgres` - View logs from the database only
