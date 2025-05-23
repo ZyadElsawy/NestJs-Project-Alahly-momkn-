@@ -42,19 +42,24 @@ npm install
 3. Create a `.env` file in the root directory and add your configuration:
 
 ```env
-# Database Configuration
+# Database Configuration (Required)
 DB_TYPE=postgres
 DB_HOST=localhost
 DB_PORT=5432
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-DB_NAME=sku_management
+DB_USERNAME=your_username  # Required
+DB_PASSWORD=your_password  # Required
+DB_NAME=your_database     # Required
 
-# Application Configuration
+# Application Configuration (Optional)
 PORT=3000
 API_PREFIX=api
 NODE_ENV=development
+
+# TypeORM Configuration (Optional)
+TYPEORM_SYNCHRONIZE=false  # Be careful with this in production!
 ```
+
+Note: The DB_USERNAME, DB_PASSWORD, and DB_NAME environment variables are required. The application will not start without them.
 
 4. Build the application:
 

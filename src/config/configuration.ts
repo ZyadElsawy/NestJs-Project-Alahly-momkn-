@@ -4,14 +4,22 @@ import { join } from "path";
 // Load .env file
 dotenv.config();
 
+// Throw an error if required environment variables are missing
+const requiredEnvVars = ["DB_USERNAME", "DB_PASSWORD", "DB_NAME"];
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    throw new Error(`Missing required environment variable: ${envVar}`);
+  }
+}
+
 export const configuration = {
   database: {
     type: process.env.DB_TYPE || "postgres",
     host: process.env.DB_HOST || "localhost",
     port: parseInt(process.env.DB_PORT || "5432", 10),
-    username: process.env.DB_USERNAME || "postgres",
-    password: process.env.DB_PASSWORD || "zyad",
-    name: process.env.DB_NAME || "sku_management",
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    name: process.env.DB_NAME,
   },
   app: {
     port: parseInt(process.env.PORT || "3000", 10),
@@ -19,7 +27,9 @@ export const configuration = {
     nodeEnv: process.env.NODE_ENV || "development",
   },
   typeorm: {
-    synchronize: process.env.TYPEORM_SYNCHRONIZE === "true",
+    synchronize:
+      process.env.NODE_ENV === "development" &&
+      process.env.TYPEORM_SYNCHRONIZE === "true",
     entities: process.env.TYPEORM_ENTITIES || "dist/**/*.entity.js",
     entitiesDir:
       process.env.TYPEORM_ENTITIES_DIR ||
