@@ -33,8 +33,8 @@ Create a `.env` file in the root directory with the following configuration:
 DB_TYPE=postgres
 DB_HOST=localhost        # Use 'postgres' if running with Docker
 DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=zyad
+DB_USERNAME=<your_db_username>
+DB_PASSWORD=<your_db_password>
 DB_NAME=sku_management
 
 # Application Configuration
