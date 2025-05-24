@@ -1,14 +1,13 @@
 # SKU Management API
 
-A comprehensive API for managing SKUs (Stock Keeping Units), inventory, stock transfers, and reorder alerts built with NestJS and PostgreSQL.
+A comprehensive API built with NestJS and PostgreSQL for managing SKUs (Stock Keeping Units), inventory tracking, stock transfers, and reorder alerts.
 
 ## Features
 
 - SKU Management (Create, Read, Update, Delete)
-- Stock Management
-- Stock Transfer between Locations
+- Stock Level Tracking
+- Stock Transfer Management
 - Reorder Alert System
-- Branch Stock Management
 - Swagger API Documentation
 
 ## Tech Stack
@@ -16,105 +15,107 @@ A comprehensive API for managing SKUs (Stock Keeping Units), inventory, stock tr
 - NestJS
 - PostgreSQL
 - TypeORM
-- Swagger/OpenAPI
+- Docker & Docker Compose
+- Swagger UI
 
 ## Prerequisites
 
 - Node.js (v14 or higher)
-- PostgreSQL
-- npm or yarn
+- PostgreSQL (if running locally)
+- Docker and Docker Compose (if running with Docker)
 
-## Installation
+## Environment Setup
 
-### Using Docker (Recommended)
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/ZyadElsawy/Back-End-Projects.git
-cd sku-management-api
-```
-
-2. Create a `.env` file (optional - default values will be used if not provided):
+Create a `.env` file in the root directory with the following configuration:
 
 ```env
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-DB_NAME=your_database
+# Database Configuration
+DB_TYPE=postgres
+DB_HOST=localhost        # Use 'postgres' if running with Docker
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=zyad
+DB_NAME=sku_management
+
+# Application Configuration
+PORT=3000
+API_PREFIX=api
+NODE_ENV=development
+
+# TypeORM Configuration
+TYPEORM_SYNCHRONIZE=true
+TYPEORM_ENTITIES=dist/**/*.entity.js
+TYPEORM_ENTITIES_DIR=src/shared/database/entities/*.entity.{ts,js}
+
+# Swagger Configuration
+SWAGGER_TITLE=SKU Management API
+SWAGGER_DESCRIPTION=A comprehensive API for managing SKUs, stock, transfers, and reorder alerts
+SWAGGER_VERSION=1.0
 ```
 
-3. Build and run with Docker Compose:
+## Running the Application
 
-```bash
-docker-compose up -d
-```
+### Local Development
 
-The API will be available at `http://localhost:3000/api` and Swagger documentation at `http://localhost:3000/api/docs`
-
-### Manual Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/ZyadElsawy/Back-End-Projects.git
-cd sku-management-api
-```
-
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory and add your configuration:
-
-```env
-# Database Configuration (Required)
-DB_TYPE=postgres
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=your_username  # Required
-DB_PASSWORD=your_password  # Required
-DB_NAME=your_database     # Required
-
-# Application Configuration (Optional)
-PORT=3000
-API_PREFIX=api
-NODE_ENV=development
-
-# TypeORM Configuration (Optional)
-TYPEORM_SYNCHRONIZE=false  # Be careful with this in production!
-```
-
-Note: The DB_USERNAME, DB_PASSWORD, and DB_NAME environment variables are required. The application will not start without them.
-
-4. Build the application:
+2. Build the application:
 
 ```bash
 npm run build
 ```
 
-5. Start the application:
+3. Run database seeding:
+
+```bash
+npm run seed
+```
+
+4. Start the development server:
 
 ```bash
 npm run start:dev
 ```
 
+### Using Docker
+
+1. Build and start the containers:
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+
+- Build the application container
+- Start PostgreSQL database
+- Run database seeding automatically
+- Start the application in development mode with hot-reload
+
 ## API Documentation
 
-Once the application is running, you can access the Swagger documentation at:
+Once the application is running, you can access:
 
-```
-http://localhost:3000/api/docs
-```
+- API Base URL: `http://localhost:3000/api`
+- Swagger Documentation: `http://localhost:3000/api/docs`
 
 ## Available Scripts
 
 - `npm run build` - Build the application
-- `npm run start:dev` - Start the application in development mode
-- `npm run start` - Start the application in production mode
+- `npm run start:dev` - Start in development mode with hot-reload
 - `npm run clean` - Clean the build directory
-- `npm run rebuild` - Clean and rebuild the application
+- `npm run seed` - Run database seeding
+- `npm run build:seed` - Build the seeder
+
+## Docker Commands
+
+- `docker-compose up --build` - Build and start all containers
+- `docker-compose down` - Stop and remove containers
+- `docker-compose logs` - View container logs
 
 ## Project Structure
 
@@ -124,29 +125,8 @@ src/
 ├── modules/            # Feature modules
 │   ├── sku/           # SKU management
 │   ├── stock/         # Stock management
-│   ├── reorder-alert/ # Reorder alert system
-│   └── ...
+│   └── reorder-alert/ # Reorder alert system
 ├── shared/            # Shared resources
+│   └── database/      # Database entities and configurations
 └── main.ts            # Application entry point
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Docker Commands
-
-- `docker-compose up -d` - Start the application and database in detached mode
-- `docker-compose down` - Stop the application and database
-- `docker-compose down -v` - Stop the application and remove all data volumes
-- `docker-compose logs -f` - View logs from all containers
-- `docker-compose logs -f app` - View logs from the application only
-- `docker-compose logs -f postgres` - View logs from the database only
