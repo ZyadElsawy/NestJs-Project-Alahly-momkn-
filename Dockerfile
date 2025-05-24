@@ -1,37 +1,27 @@
-# Build stage
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Production stage
+# Use Node.js LTS version as the base image
 FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+COPY tsconfig*.json ./
 
-# Install production dependencies only
-RUN npm ci --only=production
+# Install dependencies including development dependencies
+RUN npm install
 
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/src/shared/database/entities ./src/shared/database/entities
+# Copy the rest of the application code
+COPY . .
 
-# Expose the port the app runs on
+# Clean and build the application
+RUN npm run clean && npm run build
+
+# Build the seeder
+RUN npm run build:seed
+
+# Expose the port (assuming default NestJS port 3000)
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "run", "start:prod"] 
+# Run seed and start the application
+CMD /bin/sh -c "npm run seed && npm run start:dev" 

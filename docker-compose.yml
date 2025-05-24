@@ -2,36 +2,42 @@ version: "3.8"
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
-      - "3000:3000"
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/dist
     environment:
-      - NODE_ENV=production
-      - DB_TYPE=postgres
+      - DB_TYPE=${DB_TYPE}
       - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USERNAME=${DB_USERNAME:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-changeme}
-      - DB_NAME=${DB_NAME:-sku_management}
-      - API_PREFIX=api
-      - TYPEORM_SYNCHRONIZE=false
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - API_PREFIX=${API_PREFIX}
+      - NODE_ENV=${NODE_ENV}
+      - TYPEORM_SYNCHRONIZE=${TYPEORM_SYNCHRONIZE}
+      - TYPEORM_ENTITIES=${TYPEORM_ENTITIES}
+      - TYPEORM_ENTITIES_DIR=${TYPEORM_ENTITIES_DIR}
+      - SWAGGER_TITLE=${SWAGGER_TITLE}
+      - SWAGGER_DESCRIPTION=${SWAGGER_DESCRIPTION}
+      - SWAGGER_VERSION=${SWAGGER_VERSION}
     depends_on:
       - postgres
-    restart: unless-stopped
 
   postgres:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     environment:
-      - POSTGRES_USER=${DB_USERNAME:-postgres}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
-      - POSTGRES_DB=${DB_NAME:-sku_management}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
 
 volumes:
   postgres_data:
